@@ -1,38 +1,32 @@
-class Person {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
- 
-  greet() {
-    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
-  }
+function getNumbers() {
+  // Returns a promise that resolves with an array of numbers
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([1, 2, 3, 4]);
+    }, 3000);
+  });
 }
- 
-class Employee extends Person {
-  constructor(name, age, jobTitle) {
-    super(name, age);
-    this.jobTitle = jobTitle;
-  }
- 
-  jobGreet() {
-    console.log(
-      `Hello, my name is ${this.name}, I am ${this.age} years old, and my job title is ${this.jobTitle}.`
-    );
-  }
-}
-  
-const p1 = new Person("Alice", 25);
-p1.greet();
- 
-// Next, you create an instance of the Employee class with the name "Bob",
-// age 30, and job title "Manager", and call the jobGreet method.
-// The expected console output is: Hello, my name is Bob, I am 30 years old,
-// and my job title is Manager.
- 
-const Emp = new Employee("Bob", 30, "Manager");
-Emp.jobGreet();
- 
-// Do not change code below this line
-window.Person = Person;
-window.Employee = Employee;
+
+getNumbers()
+  .then((numbers) => {
+    // First promise: filter out odd numbers after 1 second
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const evenNumbers = numbers.filter((num) => num % 2 === 0);
+        document.getElementById("output").textContent = evenNumbers.join(", ");
+        resolve(evenNumbers);
+      }, 1000); // Delay of 1 second
+    });
+  })
+  .then((evenNumbers) => {
+    // Second promise: multiply even numbers by 2 after 2 seconds
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const multipliedNumbers = evenNumbers.map((num) => num * 2);
+        document.getElementById("output").textContent =
+          multipliedNumbers.join(", ");
+        resolve(multipliedNumbers);
+      }, 2000); // Delay of 2 seconds
+    });
+  })
+  .catch((err) => console.error(err));
